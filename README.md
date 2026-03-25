@@ -37,7 +37,7 @@ src/main/java/com/daniel/wec_ssvp/
  └── service/      # Regras de negócio da aplicação
 ```
 
-🛠️ Como executar o projeto localmente
+## 🛠️ Como executar o projeto localmente
 Pré-requisitos
 Java 17 ou superior instalado.
 
