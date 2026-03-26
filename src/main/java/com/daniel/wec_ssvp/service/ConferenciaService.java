@@ -2,14 +2,15 @@ package com.daniel.wec_ssvp.service;
 
 import com.daniel.wec_ssvp.dto.ConferenciaRequestDTO;
 import com.daniel.wec_ssvp.dto.ConferenciaResponseDTO;
-import com.daniel.wec_ssvp.model.Conferencia;
-import com.daniel.wec_ssvp.model.ConselhoParticular;
+import com.daniel.wec_ssvp.entity.Conferencia;
+import com.daniel.wec_ssvp.entity.ConselhoParticular;
 import com.daniel.wec_ssvp.repository.ConferenciaRepository;
 import com.daniel.wec_ssvp.repository.ConselhoParticularRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -44,13 +45,13 @@ public class ConferenciaService {
                 .collect(Collectors.toList());
     }
 
-    public List<ConferenciaResponseDTO> listarPorConselho(Integer conselhoId) {
+    public List<ConferenciaResponseDTO> listarPorConselho(UUID conselhoId) {
         return conferenciaRepository.findByConselhoParticularId(conselhoId).stream()
                 .map(this::toResponseDTO)
                 .collect(Collectors.toList());
     }
 
-    public void desativar(Integer id) {
+    public void deleteById(UUID id) {
         Conferencia conferencia = conferenciaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Conferência não encontrada"));
         conferencia.setAtivo(false); // Soft Delete

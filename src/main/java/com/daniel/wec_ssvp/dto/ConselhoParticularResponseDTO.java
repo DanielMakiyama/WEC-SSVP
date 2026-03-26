@@ -1,9 +1,10 @@
 package com.daniel.wec_ssvp.dto;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 public record ConselhoParticularResponseDTO(
-        Integer id,
+        UUID id,
         String nome,
         String cidade,
         LocalDate dataFundacao,

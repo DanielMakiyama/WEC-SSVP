@@ -2,12 +2,13 @@ package com.daniel.wec_ssvp.service;
 
 import com.daniel.wec_ssvp.dto.ConselhoParticularRequestDTO;
 import com.daniel.wec_ssvp.dto.ConselhoParticularResponseDTO;
-import com.daniel.wec_ssvp.model.ConselhoParticular;
+import com.daniel.wec_ssvp.entity.ConselhoParticular;
 import com.daniel.wec_ssvp.repository.ConselhoParticularRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,7 +34,7 @@ public class ConselhoParticularService {
                 .collect(Collectors.toList());
     }
 
-    public void desativar(Integer id) {
+    public void deleteById(UUID id) {
         ConselhoParticular conselho = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Conselho não encontrado"));
         conselho.setAtivo(false); // Soft delete

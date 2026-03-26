@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/conferencias")
@@ -17,25 +18,25 @@ public class ConferenciaController {
     @Autowired
     private ConferenciaService service;
 
-    @PostMapping
-    public ResponseEntity<ConferenciaResponseDTO> criar(@RequestBody ConferenciaRequestDTO dto) {
+    @PostMapping("/criar")
+    public ResponseEntity<ConferenciaResponseDTO> create(@RequestBody ConferenciaRequestDTO dto) {
         ConferenciaResponseDTO salva = service.salvar(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(salva);
     }
 
-    @GetMapping
-    public ResponseEntity<List<ConferenciaResponseDTO>> listar() {
+    @GetMapping("/buscar")
+    public ResponseEntity<List<ConferenciaResponseDTO>> findAll() {
         return ResponseEntity.ok(service.listarTodas());
     }
     
-    @GetMapping("/conselho/{conselhoId}")
-    public ResponseEntity<List<ConferenciaResponseDTO>> listarPorConselho(@PathVariable Integer conselhoId) {
+    @GetMapping("/buscarConselho/{conselhoId}")
+    public ResponseEntity<List<ConferenciaResponseDTO>> findByConselho(@PathVariable UUID conselhoId) {
         return ResponseEntity.ok(service.listarPorConselho(conselhoId));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> desativar(@PathVariable Integer id) {
-        service.desativar(id);
+    @DeleteMapping("/deletar/{id}")
+    public ResponseEntity<Void> delete(@PathVariable UUID id) {
+        service.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 }

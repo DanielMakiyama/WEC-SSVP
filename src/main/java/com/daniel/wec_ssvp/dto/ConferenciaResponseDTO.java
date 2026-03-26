@@ -1,10 +1,12 @@
 package com.daniel.wec_ssvp.dto;
 
+import java.util.UUID;
+
 public record ConferenciaResponseDTO(
-        Integer id,
+        UUID id,
         String nome,
         Boolean ativo,
-        Integer conselhoParticularId,
+        UUID conselhoParticularId,
         String conselhoParticularNome// Devolveo ID do cp que pertece para o front saber a quem pertence
 ) {
 }

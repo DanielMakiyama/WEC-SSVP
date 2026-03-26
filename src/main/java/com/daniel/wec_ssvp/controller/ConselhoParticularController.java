@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/conselhos")
@@ -17,21 +18,21 @@ public class ConselhoParticularController {
     @Autowired
     private ConselhoParticularService service;
 
-    @PostMapping
-    public ResponseEntity<ConselhoParticularResponseDTO> criar(@RequestBody ConselhoParticularRequestDTO dto) {
+    @PostMapping("/criar")
+    public ResponseEntity<ConselhoParticularResponseDTO> create(@RequestBody ConselhoParticularRequestDTO dto) {
         ConselhoParticularResponseDTO salvo = service.salvar(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(salvo);
     }
 
-    @GetMapping
-    public ResponseEntity<List<ConselhoParticularResponseDTO>> listar() {
+    @GetMapping("/buscar")
+    public ResponseEntity<List<ConselhoParticularResponseDTO>> findAll() {
         List<ConselhoParticularResponseDTO> lista = service.listarTodos();
         return ResponseEntity.ok(lista);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> desativar(@PathVariable Integer id) {
-        service.desativar(id);
+    @DeleteMapping("/deletar/{id}")
+    public ResponseEntity<Void> delete(@PathVariable UUID id) {
+        service.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 }
