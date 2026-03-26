@@ -37,7 +37,7 @@ src/main/java/com/daniel/wec_ssvp/
  └── service/      # Regras de negócio da aplicação
 ```
 
-🛠️ Como executar o projeto localmente
+## 🛠️ Como executar o projeto localmente
 Pré-requisitos
 Java 17 ou superior instalado.
 
@@ -49,7 +49,7 @@ Passos para execução
 Clone o repositório:
 
 ```text
-git clone [https://github.com/seu-usuario/WEC_SSVP.git](https://github.com/seu-usuario/WEC_SSVP.git)
+git clone https://github.com/seu-usuario/WEC_SSVP.git
 ``` 
 
 Crie um banco de dados no PostgreSQL chamado wec_ssvp.
