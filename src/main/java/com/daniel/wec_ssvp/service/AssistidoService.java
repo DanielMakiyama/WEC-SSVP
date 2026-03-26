@@ -85,6 +85,7 @@ public class AssistidoService {
 
     public AssistidoResponseDTO toResponseDTO(Assistido assistido) {
         return new AssistidoResponseDTO(
+                assistido.getId(),
                 assistido.getNome(),
                 assistido.getConjuge(),
                 assistido.getEndereco(),

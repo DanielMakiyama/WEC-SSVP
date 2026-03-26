@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public record AssistidoResponseDTO(
+        Integer id,
         String nome,
         String conjuge,
         String endereco,
