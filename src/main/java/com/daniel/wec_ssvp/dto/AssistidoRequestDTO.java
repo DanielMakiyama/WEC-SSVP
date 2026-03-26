@@ -1,9 +1,8 @@
 package com.daniel.wec_ssvp.dto;
 
-import jakarta.persistence.Column;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.UUID;
 
 public record AssistidoRequestDTO(
         String nome,
@@ -22,6 +21,7 @@ public record AssistidoRequestDTO(
         String situacaoCatequeseCrisma,
         String participacaoIgrejaCatolica,
         String problemaSaude,
-        String outrasInformacoes
+        String outrasInformacoes,
+        UUID conferenciaId
 ) {
 }

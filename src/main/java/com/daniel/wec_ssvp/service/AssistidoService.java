@@ -2,13 +2,17 @@ package com.daniel.wec_ssvp.service;
 
 import com.daniel.wec_ssvp.dto.AssistidoRequestDTO;
 import com.daniel.wec_ssvp.dto.AssistidoResponseDTO;
+import com.daniel.wec_ssvp.entity.Assistido;
+import com.daniel.wec_ssvp.entity.Conferencia; // Import necessário
 import com.daniel.wec_ssvp.repository.AssistidoRepository;
-import com.daniel.wec_ssvp.model.Assistido;
+import com.daniel.wec_ssvp.repository.ConferenciaRepository; // Import necessário
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class AssistidoService {
@@ -16,7 +20,16 @@ public class AssistidoService {
     @Autowired
     private AssistidoRepository assistidoRepository;
 
-    public Assistido createFromDTO(AssistidoRequestDTO dto){
+    @Autowired
+    private ConferenciaRepository conferenciaRepository; // <-- CORRIGIDO O TIPO AQUI
+
+    // Mudei o retorno para ResponseDTO para ficar no padrão das outras classes
+    public AssistidoResponseDTO createFromDTO(AssistidoRequestDTO dto){
+
+        // Busca a conferência no banco para garantir que ela existe
+        Conferencia conferencia = conferenciaRepository.findById(dto.conferenciaId())
+                .orElseThrow(() -> new RuntimeException("Conferência não encontrada"));
+
         Assistido newAssistido = new Assistido();
 
         newAssistido.setNome(dto.nome());
@@ -37,7 +50,11 @@ public class AssistidoService {
         newAssistido.setProblemaSaude(dto.problemaSaude());
         newAssistido.setOutrasInformacoes(dto.outrasInformacoes());
 
-        return assistidoRepository.save(newAssistido);
+        // Faz a amarração com a conferência
+        newAssistido.setConferencia(conferencia);
+
+        Assistido salvo = assistidoRepository.save(newAssistido);
+        return toResponseDTO(salvo);
     }
 
     public List<AssistidoResponseDTO> findAll(){
@@ -47,15 +64,19 @@ public class AssistidoService {
                 .toList();
     }
 
-    public Optional<AssistidoResponseDTO> findById(Integer id){
+    public Optional<AssistidoResponseDTO> findById(UUID id){
         return assistidoRepository.findById(id)
                 .map(this::toResponseDTO);
     }
 
-    public AssistidoResponseDTO update(Integer id, AssistidoRequestDTO dto){
+    public AssistidoResponseDTO update(UUID id, AssistidoRequestDTO dto){
 
         Assistido existingAssistido = assistidoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Assistido não encontrado"));
+
+        // Busca a conferência na hora de atualizar
+        Conferencia conferencia = conferenciaRepository.findById(dto.conferenciaId())
+                .orElseThrow(() -> new RuntimeException("Conferência não encontrada"));
 
         existingAssistido.setNome(dto.nome());
         existingAssistido.setConjuge(dto.conjuge());
@@ -75,11 +96,14 @@ public class AssistidoService {
         existingAssistido.setProblemaSaude(dto.problemaSaude());
         existingAssistido.setOutrasInformacoes(dto.outrasInformacoes());
 
+        //Atualiza a amarração da conferência
+        existingAssistido.setConferencia(conferencia);
+
         Assistido updateAssistido = assistidoRepository.save(existingAssistido);
         return toResponseDTO(updateAssistido);
     }
 
-    public void deleteById(Integer id){
+    public void deleteById(UUID id){
         assistidoRepository.deleteById(id);
     }
 
@@ -102,9 +126,9 @@ public class AssistidoService {
                 assistido.getSituacaoCatequeseCrisma(),
                 assistido.getParticipacaoIgrejaCatolica(),
                 assistido.getProblemaSaude(),
-                assistido.getOutrasInformacoes()
+                assistido.getOutrasInformacoes(),
+                assistido.getConferencia().getId(),
+                assistido.getConferencia().getNome()
         );
     }
-
-
 }

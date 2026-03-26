@@ -2,9 +2,11 @@ package com.daniel.wec_ssvp.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.UUID;
+
 
 public record AssistidoResponseDTO(
-        Integer id,
+        UUID id,
         String nome,
         String conjuge,
         String endereco,
@@ -21,6 +23,8 @@ public record AssistidoResponseDTO(
         String situacaoCatequeseCrisma,
         String participacaoIgrejaCatolica,
         String problemaSaude,
-        String outrasInformacoes
+        String outrasInformacoes,
+        UUID conferenciaId,
+        String conferenciaNome
 ){
 }
