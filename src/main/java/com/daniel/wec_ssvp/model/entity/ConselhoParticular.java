@@ -1,4 +1,4 @@
-package com.daniel.wec_ssvp.entity;
+package com.daniel.wec_ssvp.model.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
@@ -49,5 +49,13 @@ public class ConselhoParticular {
 
     public Boolean getAtivo() { return ativo; }
     public void setAtivo(Boolean ativo) { this.ativo = ativo; }
+
+    public String getMessage() {
+        if (ativo) {
+            return "Conselho Particular ativo";
+        } else {
+            return "Conselho Particular inativo";
+        }
+    }
 }
 

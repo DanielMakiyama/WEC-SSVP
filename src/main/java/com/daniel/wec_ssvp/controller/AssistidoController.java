@@ -1,62 +1,120 @@
 package com.daniel.wec_ssvp.controller;
 
-import com.daniel.wec_ssvp.service.AssistidoService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import com.daniel.wec_ssvp.model.dto.CriacaoUsuarioResponseDTO;
+import com.daniel.wec_ssvp.model.dto.DeleteResponseDTO;
+import com.daniel.wec_ssvp.model.dto.cadastro.AssistidoRequestDTO;
+import com.daniel.wec_ssvp.model.dto.CriacaoReuniaoResponseDTO;
+import com.daniel.wec_ssvp.service.assistido.*;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import com.daniel.wec_ssvp.dto.AssistidoRequestDTO;
-import com.daniel.wec_ssvp.dto.AssistidoResponseDTO;
 
 import java.util.List;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/assistidos")
-public class AssistidoController{
+public class AssistidoController {
 
-    @Autowired
-    private AssistidoService assistidoService;
+    private static final Logger log =
+            LoggerFactory.getLogger(AssistidoController.class);
 
-    //POST
+    private final CriarAssistidoService criarService;
+    private final ListarAssistidoService listarService;
+    private final AtualizarAssistidoService atualizarService;
+    private final DeletarAssistidoService deletarService;
+
+    public AssistidoController(
+            CriarAssistidoService criarService,
+            ListarAssistidoService listarService,
+            AtualizarAssistidoService atualizarService,
+            DeletarAssistidoService deletarService) {
+
+        this.criarService = criarService;
+        this.listarService = listarService;
+        this.atualizarService = atualizarService;
+        this.deletarService = deletarService;
+    }
+
+
     @PostMapping("/criar")
-    public ResponseEntity<AssistidoResponseDTO> create(@RequestBody AssistidoRequestDTO dto){
-        AssistidoResponseDTO savedAssistido = assistidoService.createFromDTO(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedAssistido);
+    public ResponseEntity<CriacaoUsuarioResponseDTO> create(
+            @Valid @RequestBody AssistidoRequestDTO dto,
+            HttpServletRequest request) {
+
+        String path = request.getRequestURI();
+        log.info("[IN ] POST {} - nome={}", path, dto.dadosPessoais().nome());
+
+        var response = criarService.executar(dto);
+
+        log.info("[OUT] POST {} - status=201 id={}", path, response.id());
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    //FIND ALL
+
     @GetMapping("/buscar")
-    public ResponseEntity<List<AssistidoResponseDTO>> findAll(){
-        return ResponseEntity.ok(assistidoService.findAll());
+    public ResponseEntity<?> find(
+            @RequestParam(required = false) UUID id,
+            HttpServletRequest request) {
+
+        String path = request.getRequestURI();
+
+        if (id != null) {
+            log.info("[IN ] GET {} - id={}", path, id);
+
+            var response = listarService.buscarPorId(id);
+
+            log.info("[OUT] GET {} - status=200 id={}", path, response.id());
+
+            return ResponseEntity.ok(response);
+        }
+
+        log.info("[IN ] GET {}", path);
+
+        var lista = listarService.listarTodos();
+
+        log.info("[OUT] GET {} - status=200 total={}", path, lista.size());
+
+        return ResponseEntity.ok(lista);
     }
 
-    //FIND BY ID
-    @GetMapping("/buscarId/{id}")
-    public ResponseEntity<AssistidoResponseDTO> findById(@PathVariable UUID id){
-        return assistidoService.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
 
-    //PUT
     @PutMapping("/atualizar/{id}")
-    public ResponseEntity<AssistidoResponseDTO> update(@PathVariable UUID id, @RequestBody AssistidoRequestDTO dto){
-        try{
-            AssistidoResponseDTO updateAssistido = assistidoService.update(id, dto);
-            return ResponseEntity.ok(updateAssistido);
-        }
-        catch (RuntimeException e){
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<CriacaoUsuarioResponseDTO> update(
+            @PathVariable UUID id,
+            @Valid @RequestBody AssistidoRequestDTO dto,
+            HttpServletRequest request) {
+
+        String path = request.getRequestURI();
+        log.info("[IN ] PUT {} - id={}", path, id);
+
+        var response = atualizarService.executar(id, dto);
+
+        log.info("[OUT] PUT {} - status=200 id={}", path, id);
+
+        return ResponseEntity.ok(response);
     }
 
-    //DELETE
+    @PreAuthorize("hasAuthority('GESTOR')")
     @DeleteMapping("/deletar/{id}")
-    public ResponseEntity<Void> delete(@PathVariable UUID id) {
-        assistidoService.deleteById(id);
-        return ResponseEntity.noContent().build(); // Retorna status 204 (No Content) - sucesso sem corpo de resposta
+    public ResponseEntity<DeleteResponseDTO> delete(
+            @PathVariable UUID id,
+            HttpServletRequest request) {
+
+        String path = request.getRequestURI();
+        log.info("[IN ] DELETE {} - id={}", path, id);
+
+        var response = deletarService.deleteById(id);
+
+        log.info("[OUT] DELETE {} - status=204 id={}", path, id);
+
+        return ResponseEntity.ok(response);
     }
-
-
 }
