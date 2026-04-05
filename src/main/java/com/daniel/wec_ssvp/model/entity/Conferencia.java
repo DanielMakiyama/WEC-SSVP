@@ -1,4 +1,4 @@
-package com.daniel.wec_ssvp.entity;
+package com.daniel.wec_ssvp.model.entity;
 
 import jakarta.persistence.*;
 
@@ -42,4 +42,12 @@ public class Conferencia {
 
     public ConselhoParticular getConselhoParticular() { return conselhoParticular; }
     public void setConselhoParticular(ConselhoParticular conselhoParticular) { this.conselhoParticular = conselhoParticular; }
+
+    public String getMessage() {
+        if (ativo) {
+            return "Conferência ativa";
+        } else {
+            return "Conferência inativa";
+        }
+    }
 }

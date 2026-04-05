@@ -1,4 +1,4 @@
-package com.daniel.wec_ssvp.entity;
+package com.daniel.wec_ssvp.model.entity;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
@@ -67,6 +67,9 @@ public class Assistido {
     @Column(name = "outras_informacoes", columnDefinition = "TEXT")
     private String outrasInformacoes;
 
+    @Column(nullable = false)
+    private Boolean ativo = true;
+
 
     public Assistido() {
     }
@@ -75,7 +78,7 @@ public class Assistido {
                      String estadoCivil, String religiao, String situacaoMoradia, String profissao,
                      Integer quantidadeTrabalhadores, BigDecimal rendaFamiliar, BigDecimal rendaLiquida,
                      BigDecimal valorAluguel, Integer quantidadeAlfabetizados, String situacaoCatequeseCrisma,
-                     String participacaoIgrejaCatolica, String problemaSaude, String outrasInformacoes) {
+                     String participacaoIgrejaCatolica, String problemaSaude, String outrasInformacoes, Boolean ativo) {
 
         this.nome = nome;
 
@@ -110,12 +113,15 @@ public class Assistido {
         this.problemaSaude = problemaSaude;
 
         this.outrasInformacoes = outrasInformacoes;
+
+        this.ativo = ativo;
     }
 
 
     public LocalDate getDataNascimento() {
         return dataNascimento;
     }
+
     public void setDataNascimento(LocalDate dataNascimento) {
         this.dataNascimento = dataNascimento;
     }
@@ -123,6 +129,7 @@ public class Assistido {
     public UUID getId() {
         return id;
     }
+
     public void setId(UUID id) {
         this.id = id;
     }
@@ -130,6 +137,7 @@ public class Assistido {
     public String getNome() {
         return nome;
     }
+
     public void setNome(String nome) {
         this.nome = nome;
     }
@@ -137,6 +145,7 @@ public class Assistido {
     public String getConjuge() {
         return conjuge;
     }
+
     public void setConjuge(String conjuge) {
         this.conjuge = conjuge;
     }
@@ -144,6 +153,7 @@ public class Assistido {
     public String getEndereco() {
         return endereco;
     }
+
     public void setEndereco(String endereco) {
         this.endereco = endereco;
     }
@@ -151,6 +161,7 @@ public class Assistido {
     public String getEstadoCivil() {
         return estadoCivil;
     }
+
     public void setEstadoCivil(String estadoCivil) {
         this.estadoCivil = estadoCivil;
     }
@@ -158,6 +169,7 @@ public class Assistido {
     public String getReligiao() {
         return religiao;
     }
+
     public void setReligiao(String religiao) {
         this.religiao = religiao;
     }
@@ -165,6 +177,7 @@ public class Assistido {
     public String getSituacaoMoradia() {
         return situacaoMoradia;
     }
+
     public void setSituacaoMoradia(String situacaoMoradia) {
         this.situacaoMoradia = situacaoMoradia;
     }
@@ -172,6 +185,7 @@ public class Assistido {
     public String getProfissao() {
         return profissao;
     }
+
     public void setProfissao(String profissao) {
         this.profissao = profissao;
     }
@@ -179,6 +193,7 @@ public class Assistido {
     public Integer getQuantidadeTrabalhadores() {
         return quantidadeTrabalhadores;
     }
+
     public void setQuantidadeTrabalhadores(Integer quantidadeTrabalhadores) {
         this.quantidadeTrabalhadores = quantidadeTrabalhadores;
     }
@@ -186,6 +201,7 @@ public class Assistido {
     public BigDecimal getRendaFamiliar() {
         return rendaFamiliar;
     }
+
     public void setRendaFamiliar(BigDecimal rendaFamiliar) {
         this.rendaFamiliar = rendaFamiliar;
     }
@@ -193,6 +209,7 @@ public class Assistido {
     public BigDecimal getRendaLiquida() {
         return rendaLiquida;
     }
+
     public void setRendaLiquida(BigDecimal rendaLiquida) {
         this.rendaLiquida = rendaLiquida;
     }
@@ -200,6 +217,7 @@ public class Assistido {
     public BigDecimal getValorAluguel() {
         return valorAluguel;
     }
+
     public void setValorAluguel(BigDecimal valorAluguel) {
         this.valorAluguel = valorAluguel;
     }
@@ -207,6 +225,7 @@ public class Assistido {
     public Integer getQuantidadeAlfabetizados() {
         return quantidadeAlfabetizados;
     }
+
     public void setQuantidadeAlfabetizados(Integer quantidadeAlfabetizados) {
         this.quantidadeAlfabetizados = quantidadeAlfabetizados;
     }
@@ -214,6 +233,7 @@ public class Assistido {
     public String getSituacaoCatequeseCrisma() {
         return situacaoCatequeseCrisma;
     }
+
     public void setSituacaoCatequeseCrisma(String situacaoCatequeseCrisma) {
         this.situacaoCatequeseCrisma = situacaoCatequeseCrisma;
     }
@@ -221,6 +241,7 @@ public class Assistido {
     public String getParticipacaoIgrejaCatolica() {
         return participacaoIgrejaCatolica;
     }
+
     public void setParticipacaoIgrejaCatolica(String participacaoIgrejaCatolica) {
         this.participacaoIgrejaCatolica = participacaoIgrejaCatolica;
     }
@@ -228,6 +249,7 @@ public class Assistido {
     public String getProblemaSaude() {
         return problemaSaude;
     }
+
     public void setProblemaSaude(String problemaSaude) {
         this.problemaSaude = problemaSaude;
     }
@@ -235,21 +257,37 @@ public class Assistido {
     public String getOutrasInformacoes() {
         return outrasInformacoes;
     }
+
     public void setOutrasInformacoes(String outrasInformacoes) {
         this.outrasInformacoes = outrasInformacoes;
     }
 
 
+    public Boolean getAtivo() {
+        return ativo;
+    }
 
-@ManyToOne
-@JoinColumn(name = "conferencia_id", nullable = false)
-private Conferencia conferencia;
+    public void setAtivo(Boolean ativo) {
+        this.ativo = ativo;
+    }
 
-public Conferencia getConferencia() {
-    return conferencia;
-}
+    @ManyToOne
+    @JoinColumn(name = "conferencia_id", nullable = false)
+    private Conferencia conferencia;
 
-public void setConferencia(Conferencia conferencia) {
-    this.conferencia = conferencia;
-}
+    public Conferencia getConferencia() {
+        return conferencia;
+    }
+
+    public void setConferencia(Conferencia conferencia) {
+        this.conferencia = conferencia;
+    }
+
+    public String getMessage() {
+        if (ativo) {
+            return "Assistido ativo";
+        } else {
+            return "Assistido inativo";
+        }
+    }
 }

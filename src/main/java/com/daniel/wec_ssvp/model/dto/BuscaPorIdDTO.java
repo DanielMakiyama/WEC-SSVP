@@ -1,18 +1,20 @@
-package com.daniel.wec_ssvp.dto;
+package com.daniel.wec_ssvp.model.dto;
+
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
-public record AssistidoRequestDTO(
+public record BuscaPorIdDTO (
+        UUID id,
         String nome,
         String conjuge,
         String endereco,
         LocalDate dataNascimento,
         String estadoCivil,
         String religiao,
-        String situacaoMoradia,
         String profissao,
+        String situacaoMoradia,
         Integer quantidadeTrabalhadores,
         BigDecimal rendaFamiliar,
         BigDecimal rendaLiquida,
@@ -22,6 +24,6 @@ public record AssistidoRequestDTO(
         String participacaoIgrejaCatolica,
         String problemaSaude,
         String outrasInformacoes,
-        UUID conferenciaId
-) {
-}
+        Boolean status,
+        String conferencia
+) {}
