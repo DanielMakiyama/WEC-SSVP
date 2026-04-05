@@ -4,7 +4,6 @@ import com.daniel.wec_ssvp.model.dto.ConsultaResponseDTO;
 import com.daniel.wec_ssvp.model.dto.CriacaoReuniaoResponseDTO;
 import com.daniel.wec_ssvp.model.dto.DeleteResponseDTO;
 import com.daniel.wec_ssvp.model.dto.cadastro.ConferenciaRequestDTO;
-import com.daniel.wec_ssvp.model.dto.cadastro.ConferenciaResponseDTO;
 import com.daniel.wec_ssvp.service.conferencia.*;
 
 import jakarta.servlet.http.HttpServletRequest;

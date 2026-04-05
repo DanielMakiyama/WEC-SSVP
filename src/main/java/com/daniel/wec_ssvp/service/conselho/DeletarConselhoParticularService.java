@@ -4,7 +4,6 @@ import com.daniel.wec_ssvp.exception.ConferenciaNaoEncontradaException;
 import com.daniel.wec_ssvp.exception.ConselhoParticularNaoEncontradoException;
 import com.daniel.wec_ssvp.model.dto.ConsultaResponseDTO;
 import com.daniel.wec_ssvp.model.dto.DeleteResponseDTO;
-import com.daniel.wec_ssvp.model.dto.cadastro.ConselhoParticularResponseDTO;
 import com.daniel.wec_ssvp.model.entity.ConselhoParticular;
 import com.daniel.wec_ssvp.repository.ConselhoParticularRepository;
 import org.springframework.stereotype.Service;

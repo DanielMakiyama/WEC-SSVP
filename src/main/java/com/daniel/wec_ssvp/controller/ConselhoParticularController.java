@@ -4,7 +4,6 @@ import com.daniel.wec_ssvp.model.dto.ConsultaResponseDTO;
 import com.daniel.wec_ssvp.model.dto.CriacaoReuniaoResponseDTO;
 import com.daniel.wec_ssvp.model.dto.DeleteResponseDTO;
 import com.daniel.wec_ssvp.model.dto.cadastro.ConselhoParticularRequestDTO;
-import com.daniel.wec_ssvp.model.dto.cadastro.ConselhoParticularResponseDTO;
 import com.daniel.wec_ssvp.service.conselho.*;
 
 import jakarta.servlet.http.HttpServletRequest;
