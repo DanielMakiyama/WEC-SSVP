@@ -83,7 +83,9 @@ public class SecurityConfig {
 
                         // QUALQUER OUTRA ROTA
                         .anyRequest().authenticated()
+
                 )
+
 
                 // JWT FILTER
                 .addFilterBefore(
