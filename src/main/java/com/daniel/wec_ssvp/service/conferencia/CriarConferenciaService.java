@@ -46,6 +46,7 @@ public class CriarConferenciaService {
         conferencia.setAtivo(true);
         conferencia.setConselhoParticular(conselho);
 
+
         Conferencia salva = conferenciaRepository.save(conferencia);
 
         return toResponseDTO(salva);

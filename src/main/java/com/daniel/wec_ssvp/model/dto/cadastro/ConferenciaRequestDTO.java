@@ -3,6 +3,7 @@ package com.daniel.wec_ssvp.model.dto.cadastro;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 public record ConferenciaRequestDTO(
@@ -11,5 +12,7 @@ public record ConferenciaRequestDTO(
 
         @NotNull(message = "ID da conferencia é obrigatório")
         UUID conselhoParticularId // ID do conselho q ela pertence
+
+
 ){
 }

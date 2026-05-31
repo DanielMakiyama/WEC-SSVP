@@ -98,4 +98,6 @@ public class ConselhoParticularController {
 
         return ResponseEntity.ok(response);
     }
+
+
 }

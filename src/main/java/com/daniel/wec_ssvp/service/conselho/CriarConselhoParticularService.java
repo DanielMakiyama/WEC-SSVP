@@ -47,4 +47,6 @@ public class CriarConselhoParticularService {
                 TipoReuniao.CONSELHO_PARTICULAR
         );
     }
+
+
 }
