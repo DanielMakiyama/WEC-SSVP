@@ -43,6 +43,7 @@ public class AssistidoController {
     }
 
 
+    @PreAuthorize("hasAuthority('GESTOR')")
     @PostMapping("/criar")
     public ResponseEntity<CriacaoUsuarioResponseDTO> create(
             @Valid @RequestBody AssistidoRequestDTO dto,

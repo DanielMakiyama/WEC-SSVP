@@ -63,7 +63,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
 
                         // AUTH
-                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/auth/login").permitAll()
+                        .requestMatchers("/auth/registrar").hasAuthority("GESTOR")
 
                         // CONSELHOS
                         .requestMatchers("/conselhos/criar").hasAuthority("GESTOR")
@@ -76,7 +77,7 @@ public class SecurityConfig {
                         .requestMatchers("/conferencias/buscar").permitAll()
 
                         // ASSISTIDOS
-                        .requestMatchers("/assistidos/criar").permitAll()
+                        .requestMatchers("/assistidos/criar").hasAuthority("GESTOR")
                         .requestMatchers("/assistidos/buscar").permitAll()
                         .requestMatchers("/assistidos/atualizar/**").permitAll()
                         .requestMatchers("/assistidos/deletar/**").hasAuthority("GESTOR")
