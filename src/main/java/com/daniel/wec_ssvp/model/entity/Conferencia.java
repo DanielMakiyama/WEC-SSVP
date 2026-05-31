@@ -37,6 +37,12 @@ public class Conferencia {
     public String getNome() { return nome; }
     public void setNome(String nome) { this.nome = nome; }
 
+    public String getCidade() { return conselhoParticular.getCidade(); }
+    public void setCidade(String cidade) { this.conselhoParticular.setCidade(cidade); }
+
+    public String getDataFundacao() { return conselhoParticular.getDataFundacao().toString(); }
+    public void setDataFundacao(String dataFundacao) { this.conselhoParticular.setDataFundacao(java.time.LocalDate.parse(dataFundacao)); }
+
     public Boolean getAtivo() { return ativo; }
     public void setAtivo(Boolean ativo) { this.ativo = ativo; }
 
