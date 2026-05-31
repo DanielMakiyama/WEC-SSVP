@@ -10,6 +10,7 @@ import com.daniel.wec_ssvp.service.CriarUsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,6 +33,7 @@ public class AuthController {
         this.jwtService = jwtService;
     }
 
+    @PreAuthorize("hasAuthority('GESTOR')")
     @PostMapping("/registrar")
     public ResponseEntity<String> registrar(@Valid @RequestBody UsuarioRequestDTO dto) {
         Usuario usuario = criarUsuarioService.executar(dto);
