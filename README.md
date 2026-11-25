@@ -11,7 +11,7 @@ A arquitetura do projeto foi desenhada para suportar diferentes perfis de usuár
 * **Persistência de Dados:** Spring Data JPA / Hibernate
 * **Banco de Dados:** PostgreSQL
 * **Gerenciamento de Dependências:** Maven
-* **Padrões de Arquitetura:** Arquitetura de Camadas (Controller, Service, Repository, Model, DTO)
+* **Arquitetura:** Hexagonal (Portas e Adaptadores), conforme a seção 4.5 do TG
 
 ## ⚙️ Funcionalidades
 ### Atuais (MVP)
@@ -25,17 +25,44 @@ A arquitetura do projeto foi desenhada para suportar diferentes perfis de usuár
 - [ ] Aplicação do padrão de projeto **Strategy** para isolar as lógicas de salvamento entre Administrador e Voluntário.
 - [ ] Aplicação do padrão de projeto **Observer** para sistema de notificações (avisar o admin sobre novos cadastros pendentes).
 
-## 📁 Estrutura do Projeto
-O projeto segue a padronização de diretórios do Spring Boot:
+## 📁 Estrutura do Projeto (Arquitetura Hexagonal)
+O back-end segue a arquitetura hexagonal (Cockburn, 2005): o **núcleo** guarda as regras de negócio e não depende de nenhum framework; ele se comunica com o mundo externo por **portas** (interfaces), e os **adaptadores** implementam essas portas com Spring, JPA e JWT.
+
 ```text
 src/main/java/com/daniel/wec_ssvp/
- ├── controller/   # Controladores REST (Endpoints da API)
- ├── dto/          # Objetos de Transferência de Dados (Records)
- ├── exception/    # Tratamento global de erros e exceções customizadas
- ├── model/        # Entidades mapeadas para o banco de dados (JPA)
- ├── repository/   # Interfaces de comunicação com o banco (Spring Data)
- └── service/      # Regras de negócio da aplicação
+ ├── domain/                      # NÚCLEO - Java puro, sem Spring/JPA
+ │    ├── model/                  #   Entidades de domínio (Assistido, Conferencia, ConselhoParticular, Usuario)
+ │    └── exception/              #   Exceções de regra de negócio
+ ├── application/                 # NÚCLEO - casos de uso
+ │    ├── port/in/                #   PORTAS DE ENTRADA: interfaces dos casos de uso (CriarAssistidoUseCase...)
+ │    ├── port/out/               #   PORTAS DE SAÍDA: o que o núcleo precisa de fora (repositórios, senha, token)
+ │    └── usecase/                #   Implementação dos casos de uso (sem anotações do Spring)
+ ├── adapter/                     # ADAPTADORES
+ │    ├── in/web/                 #   Entrada: controllers REST, DTOs, mapper, tratamento de erros, filtro JWT
+ │    └── out/
+ │         ├── persistence/       #   Saída: entidades JPA, Spring Data e adaptadores que implementam as portas
+ │         └── security/          #   Saída: JWT (GeradorTokenPort) e BCrypt (CodificadorSenhaPort)
+ └── config/                      # Liga tudo: instancia os casos de uso (UseCaseConfig), segurança e CORS
 ```
+
+**Regra de dependência:** `adapter` e `config` podem depender do núcleo; `domain` e `application` nunca importam nada de `adapter`, `config`, Spring ou JPA. Dá para conferir compilando o núcleo sozinho, sem nenhum jar no classpath:
+
+```text
+javac -d /tmp/nucleo $(find src/main/java/com/daniel/wec_ssvp/domain src/main/java/com/daniel/wec_ssvp/application -name "*.java")
+```
+
+**Fluxo de uma requisição**, por exemplo `POST /assistidos/criar`:
+`AssistidoController` (adaptador de entrada) → `WebMapper` converte o DTO em `AssistidoCommand` → `CriarAssistidoUseCase` (porta de entrada) → `CriarAssistidoService` aplica a regra → `AssistidoRepositoryPort` (porta de saída) → `AssistidoPersistenceAdapter` salva com JPA.
+
+### Testes
+* `application/usecase/*Test` — testam os casos de uso com portas em memória (`PortasEmMemoria`), **sem banco e sem Spring**, como previsto no item 3.5 do TG.
+* `adapter/in/web/ApiFluxoIntegrationTest` — teste ponta a ponta da API com MockMvc e H2 em memória.
+
+```text
+./mvnw clean test
+```
+
+> **Use sempre `clean` depois de apagar ou mover classes.** A compilação incremental do Maven não remove os `.class` antigos de `target/classes`; uma classe apagada continua no classpath e o Spring falha com `ConflictingBeanDefinitionException`.
 
 ## 🛠️ Como executar o projeto localmente
 Pré-requisitos
