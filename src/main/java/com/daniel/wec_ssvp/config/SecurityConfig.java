@@ -1,14 +1,11 @@
 package com.daniel.wec_ssvp.config;
 
-import com.daniel.wec_ssvp.security.CustomAccessDeniedHandler;
-import com.daniel.wec_ssvp.security.CustomAuthenticationEntryPoint;
-import com.daniel.wec_ssvp.security.JwtAuthenticationFilter;
+import com.daniel.wec_ssvp.adapter.in.web.security.CustomAccessDeniedHandler;
+import com.daniel.wec_ssvp.adapter.in.web.security.CustomAuthenticationEntryPoint;
+import com.daniel.wec_ssvp.adapter.in.web.security.JwtAuthenticationFilter;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 
@@ -95,11 +92,4 @@ public class SecurityConfig {
                 .build();
     }
 
-    @Bean
-    public AuthenticationManager authenticationManager(
-            AuthenticationConfiguration config
-    ) throws Exception {
-
-        return config.getAuthenticationManager();
-    }
-}
+}
